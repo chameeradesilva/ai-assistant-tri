@@ -1,110 +1,80 @@
 # Sri Lankan Tea Industry AI Assistant
 
-This project implements an AI-powered assistant specialized for the Sri Lankan tea industry. It processes PDF documents and creates a knowledge base for intelligent querying and information retrieval.
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
+[![Conda](https://img.shields.io/badge/Managed%20with-Conda-brightgreen.svg)](https://conda.io/)
 
-## Features
+Industry-grade AI solution for processing and analyzing tea industry documents with multi-language support and semantic search capabilities.
 
-- PDF text extraction with support for scanned documents
-- Multi-language support with OCR capabilities
-- Efficient text chunking and processing
-- High-quality embeddings generation using Sentence Transformers
-- Vector storage and retrieval using Pinecone
-- Optimized for tea industry domain knowledge
-- Layout-aware dynamic chunking
-
-## Setup
-
-1. Clone the repository
-2. Create a virtual environment:
+## Project Structure
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+tea-ai-assistant/
+├── config/                 # Configuration files
+│   ├── logging.yaml       # Logging configuration
+│   └── processing.yaml    # Document processing parameters
+├── data/                   # Sample data and test documents
+├── docs/                   # Documentation and specifications
+├── src/                    # Source code
+│   ├── scrapers/          # Web scraping components
+│   ├── pdf_processor/     # PDF extraction and processing
+│   ├── vector_db/         # Pinecone integration
+│   └── utils/             # Helper functions and utilities
+├── environment.yml         # Conda environment specification
+├── LICENSE
+└── README.md
 ```
 
-3. Install dependencies:
+## Conda Environment Setup
+
+1. Create and activate conda environment:
 ```bash
-pip install -r requirements.txt
+conda env create -f environment.yml
+conda activate scraper_env
 ```
 
-4. Install Tesseract OCR (required for multi-language support):
-   - Windows: Download installer from [Tesseract GitHub](https://github.com/UB-Mannheim/tesseract/wiki)
-   - Linux: `sudo apt-get install tesseract-ocr`
-   - Add language data packs for Sinhala and Tamil support
-
-5. Create a `.env` file with your Pinecone credentials:
-```
-PINECONE_API_KEY=your_api_key
-PINECONE_ENVIRONMENT=your_environment  # e.g., "gcp-starter"
-PINECONE_INDEX=your_index_name
-TESSERACT_PATH=/path/to/tesseract  # Optional, if not in system PATH
+2. Verify Tesseract installation:
+```bash
+tesseract --version  # Should show version 5.3.4 with Sinhala/Tamil support
 ```
 
-## Multi-Language Support
-
-The system supports multiple languages with a focus on:
-- English (primary)
-- Sinhala (with Tesseract OCR)
-- Tamil (with Tesseract OCR)
-
-Language detection is automatic, and the system will:
-1. Detect document language
-2. Apply appropriate OCR if needed
-3. Process text with language-specific considerations
-4. Store language metadata for better retrieval
-
-## Workflow
-
-1. **Document Processing**: 
-   - PDF documents are processed using PyMuPDF
-   - Automatic language detection
-   - OCR fallback for non-English text
-2. **Text Chunking**: 
-   - Layout-aware dynamic chunking (500 tokens with 50 token overlap)
-   - Preserves document structure and context
-3. **Embedding Generation**: Text chunks are converted to embeddings using Sentence Transformers
-4. **Vector Storage**: Embeddings are stored in Pinecone with enhanced metadata:
-   - Document source and ID
-   - Language information
-   - OCR confidence scores (when applicable)
-   - Page number and position
-   - Chunk context (is_first_chunk, is_last_chunk)
-   - Circular number metadata
-   - Custom tea industry specifics
-
-## Usage
-
-```python
-from src.pdf_processor import PDFProcessor
-
-# Initialize the processor
-processor = PDFProcessor()
-
-# Process a PDF file
-processor.process_pdf("path/to/your/tea_document.pdf")
+3. Configure environment variables:
+```bash
+cp .env.example .env
+# Update .env with your Pinecone credentials and Tesseract path
 ```
 
-## Best Practices
+## Processing Pipeline
 
-- Keep PDF documents focused on tea industry content
-- Ensure proper metadata tagging for better organization
-- Regular index maintenance for optimal performance
-- Monitor and manage vector storage capacity
+```mermaid
+graph TD
+    A[Document Scraping] --> B[PDF Extraction]
+    B --> C[Language Detection]
+    C --> D[OCR Processing]
+    D --> E[Text Chunking]
+    E --> F[Embedding Generation]
+    F --> G[Pinecone Storage]
+```
 
-## Contributing
 
-Contributions are welcome! Please feel free to submit pull requests.
+## Configuration Management
+- Update `config/processing.yaml` for:
+  - Chunking parameters
+  - OCR confidence thresholds
+  - Language-specific processing rules
+- Environment variables for sensitive credentials
+- YAML configurations for processing parameters
 
-## License
 
-[Specify your license here]
+**Best Practices:**
+- Monitor embedding dimensions vs index configuration
+- Track OCR success rates by language
+- Log chunking efficiency metrics
+- Implement circuit breakers for API calls
 
-## Metadata Fields
 
-New metadata fields include:
-- `language`: Detected document language
-- `ocr_confidence`: Confidence score for OCR processing
-- `doc_id`: Extracted from circular number
-- `chunk_length`: Length of each text chunk
-- `is_first_chunk`/`is_last_chunk`: Chunk position indicators
-- `total_length`: Original document length
-- `chunk_size`/`overlap`: Chunking parameters
+## Version Compatibility
+| Component       | Version  | Notes                          |
+|-----------------|----------|--------------------------------|
+| PyTorch         | 2.5.1    | CPU-only optimized            |
+| SentenceBERT    | 3.4.0    | Multi-lingual variant          |
+| Pinecone Client | 5.0.1    | Optimized batch operations

@@ -42,14 +42,11 @@ temp/
 
 /downloads
 /processed
-/output
-/input
 /venv
-/docs
-/__pycache__
-__pycache__
 /pdf_processor/__pycache__
 /pdf_processor/text_processor/__pycache__
 /pdf_processor/text_processor/text_processor/__pycache__
-
-
+__pycache__
+docs
+input
+output
