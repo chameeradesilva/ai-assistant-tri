@@ -1,0 +1,55 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+dist/
+build/
+*.exe
+*.dll
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+.nyc_output/
+
+# Debug
+debug/
+*.pdb
+
+# Local development
+tmp/
+temp/
+
+/downloads
+/processed
+/output
+/input
+/venv
+/docs
+/__pycache__
+__pycache__
+/pdf_processor/__pycache__
+/pdf_processor/text_processor/__pycache__
+/pdf_processor/text_processor/text_processor/__pycache__
+
+
