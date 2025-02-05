@@ -1,0 +1,154 @@
+# PDF Processing Configuration
+pdf_processing:
+  # Processing Path Selection
+  processing_path:
+    active_path: 'basic'  # Options: 'basic', 'advanced', 'google_vision'
+    paths:
+      basic:
+        description: 'Basic processing using PyMuPDF and Tesseract OCR only'
+        enabled: true
+        components: ['pymupdf', 'tesseract']
+      advanced:
+        description: 'Advanced processing with additional tools'
+        enabled: false
+        components: ['pymupdf', 'tesseract', 'camelot', 'tabula', 'opencv']
+      google_vision:
+        description: 'Google Cloud Vision API based processing'
+        enabled: false
+        components: ['google_vision', 'pymupdf']
+        api_config:
+          credentials_path: 'config/google_credentials.json'
+          timeout: 90
+          batch_size: 10
+          
+  # OCR Settings
+  ocr:
+    enabled: true
+    language: 'eng'  # Only English for now
+    strategy: 'accurate'  # Changed to accurate for better results
+    dpi: 300
+    confidence_threshold: 40  # Lowered threshold for scanned docs
+    temp_dir: 'temp/ocr'
+    cleanup_temp: true
+    psm: 3  # Page segmentation mode (3 for auto)
+    oem: 3  # OCR Engine mode (3 for default)
+    max_retries: 3
+    timeout: 60  # Increased timeout for better accuracy
+    
+  # Table Extraction
+  table:
+    enabled: false  # Disabled table detection
+    engine: 'visual'
+    flavor: 'lattice'
+    line_scale: 40
+    edge_tol: 500
+    row_tol: 10
+    max_tables_per_page: 10
+    min_table_size: 4
+    
+  # Image Preprocessing
+  image:
+    enable_preprocessing: true
+    denoise: true
+    deskew: true
+    remove_lines: false  # Disabled to preserve table lines
+    adaptive_threshold: true
+    block_size: 11
+    c_value: 2
+    max_image_size: 5000
+    
+  # Document Loading
+  loader:
+    mode: 'pymupdf_only'
+    batch_size: 10
+    max_file_size_mb: 50
+    supported_formats: ['pdf']
+    language_handling:
+      process_english_only: true
+      skip_non_english: true
+      store_skipped_files: true
+    
+  # Text Chunking
+  chunking:
+    chunk_size: 1000
+    chunk_overlap: 200
+    length_function: 'char'
+    separators: ["\n\n", "\n", " ", ""]
+    max_chunks_per_doc: 1000
+    min_chunk_size: 50
+    max_iterations: 10000
+    memory_limit_mb: 1000
+    
+  # NLP Processing
+  nlp:
+    enable_preprocessing: true
+    lowercase: true
+    remove_special_chars: true
+    remove_stopwords: true
+    lemmatize: true
+    language: 'english'  # Only English for now
+    custom_patterns:
+      - pattern: '^\d+\.'  # Remove numbered list markers
+        replace: ''
+      - pattern: '^\s*page\s+\d+\s*$'  # Remove page numbers
+        replace: ''
+    content_tags:
+      - category: 'document_type'
+        patterns:
+          - pattern: '(?i)circular|advisory'
+            tag: 'circular'
+          - pattern: '(?i)guideline|manual|instruction'
+            tag: 'guideline'
+      - category: 'subject_matter'
+        patterns:
+          - pattern: '(?i)tea|cultivation|processing'
+            tag: 'tea_production'
+          - pattern: '(?i)research|study|analysis'
+            tag: 'research'
+          - pattern: '(?i)quality|standard|certification'
+            tag: 'quality_control'
+    
+  # Metadata
+  metadata:
+    include_page_numbers: true
+    include_chunk_info: true
+    track_source: true
+    preserve_original_metadata: true
+    standardize_dates: true
+    date_formats:
+      - '%Y-%m-%d'
+      - '%d/%m/%Y'
+      - '%B %d, %Y'
+    required_fields:
+      - doc_id
+      - title
+      - language
+      - document_type
+      - issued_date
+    optional_fields:
+      - author
+      - department
+      - keywords
+      - summary
+    processing_info:
+      track_parameters: true
+      track_timing: true
+      track_resources: true
+    content_analysis:
+      detect_language: true
+      classify_type: true
+      extract_keywords: true
+      generate_summary: true
+    
+  # Embedding
+  embedding:
+    model_name: 'all-MiniLM-L6-v2'
+    batch_size: 32
+    max_retries: 3
+    
+  # Vector Store
+  vector_store:
+    engine: 'pinecone'
+    dimension: 384
+    metric: 'cosine'
+    batch_size: 100 

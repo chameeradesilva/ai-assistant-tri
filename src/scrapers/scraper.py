@@ -1,8 +1,10 @@
-import requests
+'''scraper script to scrape data from the TRI website'''
+import os
 import json
 from pathlib import Path
 import logging
 import logging.config
+import requests
 import yaml
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -10,7 +12,7 @@ from tqdm import tqdm
 import pyarrow as pa
 import pyarrow.parquet as pq
 import fastavro
-import os
+
 
 def setup_logging(default_path='config/logging.yaml', default_level=logging.INFO):
     """Setup logging configuration from YAML file"""

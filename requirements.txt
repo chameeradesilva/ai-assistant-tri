@@ -1,0 +1,15 @@
+camelot-py==0.11.0
+tabula-py==2.9.0
+opencv-python==4.9.0.80
+numpy>=1.24.0
+pandas>=2.0.0
+PyMuPDF==1.23.8
+Pillow>=10.0.0
+pytesseract==0.3.10
+python-dotenv==1.0.0
+PyYAML==6.0.1
+langdetect==1.0.9
+pinecone-client>=3.0.0
+langchain>=0.1.0
+langchain-community>=0.0.10
+sentence-transformers>=2.2.2 
