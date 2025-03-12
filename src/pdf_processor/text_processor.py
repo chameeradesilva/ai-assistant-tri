@@ -123,6 +123,7 @@ class TextProcessor:
                     end = min(start + self.chunk_size, total_length)
                 
                 chunk_text = text[start:end]
+                print(f"chunk_text: {chunk_text}")
                 chunk_id = str(uuid.uuid4())
                 
                 # Create chunk-specific metadata
