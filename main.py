@@ -199,9 +199,10 @@ def main():
         
         if args.test:
             all_metadata = all_metadata[:1]  # Take only the first document in test mode
-            
-        total_files = len(all_metadata)
-        
+        # else:
+        #     all_metadata = all_metadata[:10]
+
+        total_files = len(all_metadata)                
         if total_files == 0:
             logger.warning("No valid PDFs found in metadata")
             return

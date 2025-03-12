@@ -41,9 +41,8 @@ class PineconeStorage:
             vectors = [(
                 chunk['id'],
                 chunk['embedding'],
-                chunk['metadata']
+                {**chunk['metadata'], "text": chunk['text']}
             ) for chunk in batch]
             
             self.index.upsert(vectors=vectors)
-            time.sleep(1)  # Rate limit between batch uploads 
-            
+            time.sleep(1)  # Rate limit between batch uploads
